@@ -7,14 +7,16 @@ function Question({ question, onAnswered }) {
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      setTimeRemaining((timeRemaining) => timeRemaining - 1);
+      setTimeRemaining((countDown) => countDown - 1);
     }, 1000);
     if (timeRemaining === 0) {
       setTimeRemaining(10);
       onAnswered(false);
     }
-    return () => clearTimeout(() => timerId);
-  });
+    return function cleanup() {
+      clearTimeout(timerId);
+    };
+  }, [timeRemaining, onAnswered]);
 
   function handleAnswer(isCorrect) {
     setTimeRemaining(10);
